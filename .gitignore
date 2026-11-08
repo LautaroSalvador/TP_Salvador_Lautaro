@@ -1,0 +1,13 @@
+# Entorno virtual: no se entrega, se recrea con requirements.txt
+venv/
+
+# Archivos que genera Python solo
+__pycache__/
+*.pyc
+
+# Base de datos: se genera con python build_database.py
+people.db
+
+# Pruebas y sistema
+.pytest_cache/
+.DS_Store
