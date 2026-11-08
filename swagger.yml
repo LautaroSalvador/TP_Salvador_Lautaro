@@ -56,6 +56,19 @@ components:
         fname:
           type: "string"
           description: "Nombre nuevo (el apellido no se cambia: lo identifica la URL)"
+    Resumen:
+      type: "object"
+      properties:
+        lname:
+          type: "string"
+        fname:
+          type: "string"
+        cantidad_pizzas:
+          type: "integer"
+          description: "Cantidad de pizzas que pidió la persona"
+        total_gastado:
+          type: "number"
+          description: "Suma de los precios de sus pizzas"
     Error:
       type: "object"
       properties:
@@ -102,6 +115,13 @@ components:
       required: true
       schema:
         type: "string"
+    person_id_query:
+      name: "person_id"
+      description: "Filtrar por ID de persona (opcional)"
+      in: query
+      required: false
+      schema:
+        type: "integer"
     pizza_id:
       name: "pizza_id"
       description: "ID de la pizza"
@@ -207,7 +227,63 @@ paths:
         "404":
           $ref: "#/components/responses/PersonNotFound"
 
+  /people/{lname}/pizzas:
+    get:
+      operationId: "people.read_pizzas"
+      tags:
+        - "Personas"
+      summary: "Listar las pizzas de una persona"
+      parameters:
+        - $ref: "#/components/parameters/lname"
+      responses:
+        "200":
+          description: "Pizzas de la persona (de la más nueva a la más vieja)"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Pizza"
+        "404":
+          $ref: "#/components/responses/PersonNotFound"
+
+  /people/{lname}/resumen:
+    get:
+      operationId: "people.read_resumen"
+      tags:
+        - "Personas"
+      summary: "Resumen de una persona: cantidad de pizzas y total gastado"
+      parameters:
+        - $ref: "#/components/parameters/lname"
+      responses:
+        "200":
+          description: "Resumen de la persona"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Resumen"
+        "404":
+          $ref: "#/components/responses/PersonNotFound"
+
   /pizzas:
+    get:
+      operationId: "pizzas.read_all"
+      tags:
+        - "Pizzas"
+      summary: "Listar todas las pizzas (opcionalmente, solo las de una persona)"
+      parameters:
+        - $ref: "#/components/parameters/person_id_query"
+      responses:
+        "200":
+          description: "Lista de pizzas"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Pizza"
+        "404":
+          $ref: "#/components/responses/PersonNotFound"
     post:
       operationId: "pizzas.create"
       tags:

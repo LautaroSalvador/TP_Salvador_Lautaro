@@ -52,5 +52,6 @@ class PersonSchema(ma.SQLAlchemyAutoSchema):
 
 
 pizza_schema = PizzaSchema()
+pizzas_schema = PizzaSchema(many=True)
 person_schema = PersonSchema()
 people_schema = PersonSchema(many=True)
