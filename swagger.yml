@@ -21,6 +21,8 @@ components:
         content:
           type: "string"
           description: "Descripción de la pizza"
+          minLength: 1
+          pattern: "\\S"
         price:
           type: "number"
           description: "Precio de la pizza (mayor que 0)"
@@ -52,6 +54,8 @@ components:
         lname:
           type: "string"
           description: "Apellido (único, identifica a la persona en la URL)"
+          minLength: 1
+          pattern: "\\S"
         timestamp:
           type: "string"
           format: "date-time"

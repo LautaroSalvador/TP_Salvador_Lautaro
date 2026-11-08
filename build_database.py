@@ -32,7 +32,9 @@ PEOPLE_PIZZA = [
     },
 ]
 
-with app.app_context():
+
+def crear_base():
+    """Borra la base, crea las tablas y carga los datos de ejemplo."""
     db.drop_all()
     db.create_all()
     for data in PEOPLE_PIZZA:
@@ -48,3 +50,8 @@ with app.app_context():
             )
         db.session.add(new_person)
     db.session.commit()
+
+
+if __name__ == "__main__":
+    with app.app_context():
+        crear_base()

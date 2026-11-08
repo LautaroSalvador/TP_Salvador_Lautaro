@@ -7,7 +7,7 @@ def buscar_persona(lname):
     """Devuelve la persona con ese apellido, o corta con 404 si no existe."""
     person = Person.query.filter(Person.lname == lname).one_or_none()
     if person is None:
-        abort(404, f"Person with last name {lname} not found")
+        abort(404, f"No existe una persona con apellido {lname}")
     return person
 
 
@@ -26,7 +26,7 @@ def create(person):
         db.session.commit()
         return person_schema.dump(new_person), 201
     else:
-        abort(406, f"Person with last name {lname} already exists")
+        abort(406, f"Ya existe una persona con apellido {lname}")
 
 
 def read_one(lname):

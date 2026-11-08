@@ -7,7 +7,7 @@ def buscar_pizza(pizza_id):
     """Devuelve la pizza con ese ID, o corta con 404 si no existe."""
     pizza = db.session.get(Pizza, pizza_id)
     if pizza is None:
-        abort(404, f"Pizza with ID {pizza_id} not found")
+        abort(404, f"No existe una pizza con ID {pizza_id}")
     return pizza
 
 
@@ -15,7 +15,7 @@ def buscar_persona_por_id(person_id):
     """Devuelve la persona con ese ID, o corta con 404 si no existe."""
     person = db.session.get(Person, person_id)
     if person is None:
-        abort(404, f"Person not found for ID: {person_id}")
+        abort(404, f"No existe una persona con ID {person_id}")
     return person
 
 
