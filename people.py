@@ -59,6 +59,5 @@ def read_resumen(lname):
         "lname": person.lname,
         "fname": person.fname,
         "cantidad_pizzas": len(person.pizzas),
-        # Las pizzas todavía no tienen precio: se suma en la Parte 4
-        "total_gastado": 0,
+        "total_gastado": round(sum(pizza.price for pizza in person.pizzas), 2),
     }

@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>RP Flask REST API</title>
+    <title>API Personas y Pizzas</title>
 </head>
 <body>
-    <h1>
-        Hello, People Eat Surfing Pizza!
-    </h1>
+    <h1>Personas y Pizzas</h1>
+    <p>Documentación interactiva: <a href="/api/ui/">/api/ui/</a></p>
     {% for person in people %}
     <h2>{{ person.fname }} {{ person.lname }}</h2>
     <ul>
         {% for pizza in person.pizzas %}
         <li>
-           Id-Pizza:{{ pizza.id }}   Tipo: {{ pizza.content }}
+            #{{ pizza.id }} {{ pizza.content }}
+            ({{ pizza.size or "sin tamaño" }}, ${{ "%.2f"|format(pizza.price) }})
+            – {{ pizza.timestamp.strftime('%d/%m/%Y %H:%M') }}
         </li>
+        {% else %}
+        <li>Sin pizzas todavía</li>
         {% endfor %}
     </ul>
     {% endfor %}

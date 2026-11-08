@@ -35,6 +35,8 @@ def read_one(pizza_id):
 def update(pizza_id, pizza):
     existing_pizza = buscar_pizza(pizza_id)
     existing_pizza.content = pizza.get("content")
+    existing_pizza.price = pizza.get("price")
+    existing_pizza.size = pizza.get("size")
     db.session.commit()
     return pizza_schema.dump(existing_pizza), 200
 

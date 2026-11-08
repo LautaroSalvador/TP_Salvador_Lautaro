@@ -3,30 +3,31 @@ from datetime import datetime
 from config import app, db
 from models import Pizza, Person
 
+# Cada pizza es una tupla: (contenido, precio, tamaño, fecha del pedido)
 PEOPLE_PIZZA = [
     {
         "lname": "Sanchez",
         "fname": "Ricardo",
         "pizzas": [
-            ("Pizza Mozzarella y Queso", "2022-01-06 17:10:24",),
-            ("Pizza Cebolla y Queso","2022-03-05 22:17:54",),
-            ("Pizza roqefort", "2022-03-05 22:18:10",),
+            ("Pizza Mozzarella y Queso", 9500, "grande", "2022-01-06 17:10:24"),
+            ("Pizza Cebolla y Queso", 8200, "mediana", "2022-03-05 22:17:54"),
+            ("Pizza Roquefort", 10800, "grande", "2022-03-05 22:18:10"),
         ],
     },
     {
         "lname": "Gomez",
         "fname": "Cintya",
         "pizzas": [
-            ("Pizza Peperoni", "2022-01-01 09:15:03",),
-            ("Pizza de Jamon crudo y Rucula","2022-02-06 13:09:21",),
+            ("Pizza Pepperoni", 7400, "chica", "2022-01-01 09:15:03"),
+            ("Pizza de Jamón crudo y Rúcula", 12500, "grande", "2022-02-06 13:09:21"),
         ],
     },
     {
         "lname": "Lopez",
         "fname": "Raul",
         "pizzas": [
-            ("Pizza Arrollada","2022-01-07 22:47:54",),
-            ("Piza Cuatro Quesos","2022-01-07 22:47:54",),
+            ("Pizza Arrollada", 9900, "mediana", "2022-01-07 22:47:54"),
+            ("Pizza Cuatro Quesos", 11200, "grande", "2022-01-07 22:47:54"),
         ],
     },
 ]
@@ -36,13 +37,13 @@ with app.app_context():
     db.create_all()
     for data in PEOPLE_PIZZA:
         new_person = Person(lname=data.get("lname"), fname=data.get("fname"))
-        for content, timestamp in data.get("pizzas", []):
+        for content, price, size, timestamp in data.get("pizzas", []):
             new_person.pizzas.append(
                 Pizza(
                     content=content,
-                    timestamp=datetime.strptime(
-                        timestamp, "%Y-%m-%d %H:%M:%S"
-                    ),
+                    price=price,
+                    size=size,
+                    timestamp=datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S"),
                 )
             )
         db.session.add(new_person)

@@ -21,6 +21,19 @@ components:
         content:
           type: "string"
           description: "Descripción de la pizza"
+        price:
+          type: "number"
+          description: "Precio de la pizza (mayor que 0)"
+          minimum: 0
+          exclusiveMinimum: true
+          example: 9500
+        size:
+          type: "string"
+          description: "Tamaño de la pizza"
+          enum:
+            - "chica"
+            - "mediana"
+            - "grande"
         timestamp:
           type: "string"
           format: "date-time"
@@ -301,6 +314,7 @@ paths:
                 - required:
                     - person_id
                     - content
+                    - price
       responses:
         "201":
           description: "Pizza creada"
@@ -334,7 +348,7 @@ paths:
       operationId: "pizzas.update"
       tags:
         - "Pizzas"
-      summary: "Cambiar el contenido de una pizza"
+      summary: "Modificar una pizza (contenido, precio y tamaño)"
       parameters:
         - $ref: "#/components/parameters/pizza_id"
       requestBody:
@@ -348,6 +362,7 @@ paths:
                 - $ref: "#/components/schemas/Pizza"
                 - required:
                     - content
+                    - price
       responses:
         "200":
           description: "Pizza actualizada"

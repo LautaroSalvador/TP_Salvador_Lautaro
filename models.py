@@ -14,6 +14,8 @@ class Pizza(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     person_id = db.Column(db.Integer, db.ForeignKey("person.id"))
     content = db.Column(db.String, nullable=False)
+    price = db.Column(db.Float, nullable=False)
+    size = db.Column(db.String(10))
     timestamp = db.Column(db.DateTime, default=ahora_utc, onupdate=ahora_utc)
 
 
