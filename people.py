@@ -11,8 +11,9 @@ def buscar_persona(lname):
     return person
 
 
-def read_all():
-    people = Person.query.all()
+def read_all(limit=None, offset=0):
+    # limit=None significa "sin límite": devuelve todas
+    people = Person.query.order_by(Person.id).offset(offset).limit(limit).all()
     return people_schema.dump(people)
 
 

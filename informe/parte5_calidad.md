@@ -71,7 +71,7 @@ se repite con -500, 0 y "caro" usando `@pytest.mark.parametrize`).
 **Pruebas adicionales**: apellido vacío, contenido vacío, pizza sin precio, tamaño inválido,
 actualizar persona (200), actualizar pizza (200), borrar pizza (204), pizza inexistente (404).
 
-**Resultado**: `25 passed`.
+**Resultado**: `25 passed` al terminar la Parte 5 (con las pruebas de paginación de la Parte 6, `34 passed`).
 
 ## 4. requirements.txt y README
 

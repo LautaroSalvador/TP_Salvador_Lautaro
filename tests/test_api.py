@@ -205,3 +205,47 @@ def test_resumen_de_persona(client):
 
 def test_resumen_de_persona_inexistente_devuelve_404(client):
     assert client.get("/api/people/NoExiste/resumen").status_code == 404
+
+
+# ---------------------------------------------------------------- Paginación (Parte 6)
+
+
+def test_paginar_personas_con_limit(client):
+    respuesta = client.get("/api/people?limit=2")
+
+    assert respuesta.status_code == 200
+    assert [p["lname"] for p in respuesta.get_json()] == ["Sanchez", "Gomez"]
+
+
+def test_paginar_personas_con_limit_y_offset(client):
+    respuesta = client.get("/api/people?limit=2&offset=2")
+
+    assert respuesta.status_code == 200
+    assert [p["lname"] for p in respuesta.get_json()] == ["Lopez"]
+
+
+def test_paginar_pizzas_con_limit_y_offset(client):
+    respuesta = client.get("/api/pizzas?limit=3&offset=3")
+
+    assert respuesta.status_code == 200
+    assert [pizza["id"] for pizza in respuesta.get_json()] == [4, 5, 6]
+
+
+def test_paginar_pizzas_de_una_persona(client):
+    respuesta = client.get("/api/pizzas?person_id=1&limit=2&offset=1")
+
+    assert respuesta.status_code == 200
+    assert [pizza["id"] for pizza in respuesta.get_json()] == [2, 3]
+
+
+def test_offset_mayor_que_la_cantidad_devuelve_lista_vacia(client):
+    respuesta = client.get("/api/pizzas?offset=100")
+
+    assert respuesta.status_code == 200
+    assert respuesta.get_json() == []
+
+
+@pytest.mark.parametrize("parametros", ["limit=0", "limit=-1", "offset=-1", "limit=abc"])
+def test_paginacion_con_valores_invalidos_devuelve_400(client, parametros):
+    assert client.get(f"/api/people?{parametros}").status_code == 400
+    assert client.get(f"/api/pizzas?{parametros}").status_code == 400

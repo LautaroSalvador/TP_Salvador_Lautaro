@@ -19,11 +19,13 @@ def buscar_persona_por_id(person_id):
     return person
 
 
-def read_all(person_id=None):
-    if person_id is None:
-        pizzas = Pizza.query.order_by(Pizza.id).all()
-    else:
-        pizzas = buscar_persona_por_id(person_id).pizzas
+def read_all(person_id=None, limit=None, offset=0):
+    consulta = Pizza.query.order_by(Pizza.id)
+    if person_id is not None:
+        buscar_persona_por_id(person_id)  # 404 si la persona no existe
+        consulta = consulta.filter(Pizza.person_id == person_id)
+    # limit=None significa "sin límite": devuelve todas
+    pizzas = consulta.offset(offset).limit(limit).all()
     return pizzas_schema.dump(pizzas)
 
 

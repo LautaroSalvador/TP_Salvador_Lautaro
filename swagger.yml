@@ -132,6 +132,23 @@ components:
       required: true
       schema:
         type: "string"
+    limit:
+      name: "limit"
+      description: "Cantidad máxima de resultados (paginación)"
+      in: query
+      required: false
+      schema:
+        type: "integer"
+        minimum: 1
+    offset:
+      name: "offset"
+      description: "Cantidad de resultados a saltear desde el principio (paginación)"
+      in: query
+      required: false
+      schema:
+        type: "integer"
+        minimum: 0
+        default: 0
     person_id_query:
       name: "person_id"
       description: "Filtrar por ID de persona (opcional)"
@@ -154,6 +171,9 @@ paths:
       tags:
         - "Personas"
       summary: "Listar todas las personas con sus pizzas"
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
       responses:
         "200":
           description: "Lista de personas"
@@ -163,6 +183,8 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/Person"
+        "400":
+          $ref: "#/components/responses/BadRequest"
     post:
       operationId: "people.create"
       tags:
@@ -290,6 +312,8 @@ paths:
       summary: "Listar todas las pizzas (opcionalmente, solo las de una persona)"
       parameters:
         - $ref: "#/components/parameters/person_id_query"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
       responses:
         "200":
           description: "Lista de pizzas"
@@ -299,6 +323,8 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/Pizza"
+        "400":
+          $ref: "#/components/responses/BadRequest"
         "404":
           $ref: "#/components/responses/PersonNotFound"
     post:

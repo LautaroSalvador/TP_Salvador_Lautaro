@@ -64,7 +64,7 @@ Para correrlas, con el entorno virtual activado y desde la carpeta del proyecto:
 pytest
 ```
 
-Si todo está bien termina con `25 passed`. Para ver el nombre de cada prueba: `pytest -v`.
+Si todo está bien termina con `34 passed`. Para ver el nombre de cada prueba: `pytest -v`.
 
 Cada prueba arranca con una base de datos nueva **en memoria** y con los datos de ejemplo,
 así que las pruebas no dependen unas de otras y **no modifican `people.db`**.
@@ -72,7 +72,8 @@ La base se elige con la variable de entorno `DATABASE_URL` (ver `config.py`).
 
 Cubren: listar y crear personas, apellido duplicado (406), persona inexistente (404),
 crear pizza, pizza con persona inexistente (404), precio y tamaño inválidos (400),
-textos vacíos (400), actualizar y borrar, borrado en cascada y los tres endpoints nuevos.
+textos vacíos (400), actualizar y borrar, borrado en cascada, los tres endpoints nuevos
+y la paginación.
 
 ## Endpoints
 
@@ -80,14 +81,14 @@ Todas las rutas empiezan con `/api`.
 
 | Método | Ruta | Qué hace | Respuestas |
 |--------|------|----------|------------|
-| GET | `/people` | Lista todas las personas con sus pizzas | 200 |
+| GET | `/people` | Lista las personas con sus pizzas; acepta `limit` y `offset` | 200, 400 |
 | POST | `/people` | Crea una persona (`lname` obligatorio, `fname`) | 201, 400, 406 |
 | GET | `/people/{lname}` | Consulta una persona por apellido | 200, 404 |
 | PUT | `/people/{lname}` | Cambia el nombre (`fname`) de una persona | 200, 400, 404 |
 | DELETE | `/people/{lname}` | Borra una persona y todas sus pizzas | 204, 404 |
 | GET | `/people/{lname}/pizzas` | Lista las pizzas de una persona | 200, 404 |
 | GET | `/people/{lname}/resumen` | Cantidad de pizzas y total gastado | 200, 404 |
-| GET | `/pizzas` | Lista todas las pizzas; acepta `?person_id=N` para filtrar | 200, 400, 404 |
+| GET | `/pizzas` | Lista las pizzas; acepta `person_id`, `limit` y `offset` | 200, 400, 404 |
 | POST | `/pizzas` | Crea una pizza (`person_id`, `content`, `price` obligatorios; `size`) | 201, 400, 404 |
 | GET | `/pizzas/{pizza_id}` | Consulta una pizza por ID | 200, 404 |
 | PUT | `/pizzas/{pizza_id}` | Modifica una pizza (`content`, `price` obligatorios; `size`) | 200, 400, 404 |
@@ -99,7 +100,25 @@ Reglas de los datos:
 - `price` es un número mayor que 0.
 - `size` solo puede ser `chica`, `mediana` o `grande`.
 
-Ejemplo:
+## Paginación (Parte 6)
+
+`GET /api/people` y `GET /api/pizzas` aceptan dos parámetros opcionales:
+
+- `limit`: cantidad máxima de resultados (entero, mínimo 1). Si no se manda, devuelve todos.
+- `offset`: cuántos resultados saltear desde el principio (entero, mínimo 0, por defecto 0).
+
+Los resultados se ordenan por `id`, así las páginas no se superponen.
+
+```bash
+curl "http://localhost:8000/api/pizzas?limit=3"            # pizzas 1 a 3
+curl "http://localhost:8000/api/pizzas?limit=3&offset=3"   # pizzas 4 a 6
+curl "http://localhost:8000/api/pizzas?person_id=1&limit=2" # primeras 2 de la persona 1
+```
+
+Valores inválidos (`limit=0`, `offset=-1`, `limit=abc`) devuelven 400.
+
+## Ejemplo
+
 
 ```bash
 curl -X POST http://localhost:8000/api/pizzas \
